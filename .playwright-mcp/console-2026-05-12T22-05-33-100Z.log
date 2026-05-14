@@ -1,2 +1,0 @@
-[      51ms] [ERROR] Failed to load resource: the server responded with a status of 501 (Not Implemented) @ http://localhost:18000/api/v1/tts-voices:0
-[   26009ms] [ERROR] Failed to load resource: the server responded with a status of 501 (Not Implemented) @ http://localhost:18000/api/v1/tts-voices:0

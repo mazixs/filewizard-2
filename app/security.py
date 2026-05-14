@@ -1,10 +1,9 @@
 import html
-import os
+import unicodedata
 from pathlib import Path
 from typing import List
 
 from fastapi import HTTPException, Request, status
-from werkzeug.utils import secure_filename
 
 from app.config import APP_CONFIG, LOCAL_ONLY_MODE, PATHS, logger
 
@@ -22,9 +21,20 @@ def ensure_path_is_safe(p: Path, allowed_bases: List[Path]):
 
 
 def sanitize_filename(filename: str) -> str:
-    """Sanitize filename to prevent path traversal and XSS"""
-    safe_name = secure_filename(filename or "")
-    return html.escape(safe_name)
+    """Sanitize filename to prevent path traversal and XSS while preserving Unicode letters."""
+    if not filename:
+        return ""
+    # Normalize unicode and strip dangerous characters
+    name = unicodedata.normalize("NFC", filename)
+    # Remove path separators, null bytes, and control characters
+    name = name.replace("..", "_")
+    for ch in "\x00\x01\x02\x03\x04\x05\x06\x07\x08\x0b\x0c\x0e\x0f\x10\x11\x12\x13\x14\x15\x16\x17\x18\x19\x1a\x1b\x1c\x1d\x1e\x1f/\\":
+        name = name.replace(ch, "_")
+    # Strip leading/trailing whitespace and dots
+    name = name.strip(". ")
+    if not name:
+        name = "untitled"
+    return html.escape(name)
 
 
 def sanitize_output(output: str) -> str:
