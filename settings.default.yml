@@ -381,6 +381,64 @@ conversion_tools:
       textile: Textile
       opml: OPML
       man: Groff Man Page
+    filters:
+      md: markdown
+      gfm: gfm
+      tex: latex
+      html: html5
+      txt: plain
+      rst: rst
+      epub: epub
+      epub2: epub2
+      docx: docx
+      odt: odt
+      pdf: pdf
+      rtf: rtf
+      pptx: pptx
+      beamer: beamer
+      slidy: slidy
+      revealjs: revealjs
+      asciidoc: asciidoc
+      textile: textile
+      opml: opml
+      man: man
+      docbook: docbook
+      latex: latex
+      context: context
+      ms: ms
+      fb2: fb2
+      jats: jats
+      tei: tei
+      docbook5: docbook5
+      zimwiki: zimwiki
+      xwiki: xwiki
+      muse: muse
+      haddock: haddock
+      dzslides: dzslides
+      s5: s5
+    formats:
+      docx: Word Document
+      odt: OpenDocument Text
+      pdf: PDF Document
+      rtf: Rich Text Format
+      txt: Plain Text
+      md: Markdown (Strict)
+      gfm: Markdown (GitHub-Flavored)
+      tex: LaTeX
+      html: HTML5
+      epub: EPUB v3 Book
+      epub2: EPUB v2 Book
+      pptx: PowerPoint Presentation
+      beamer: Beamer PDF Slides
+      slidy: Slidy HTML Slides
+      revealjs: reveal.js HTML Slides
+      rst: reStructuredText
+      jira: Jira Wiki Markup
+      mediawiki: MediaWiki Markup
+      asciidoc: AsciiDoc
+      textile: Textile
+      opml: OPML
+      man: Groff Man Page
       docbook:
         DocBook XML
         # Additional document formats

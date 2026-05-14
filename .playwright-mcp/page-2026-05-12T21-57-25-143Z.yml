@@ -1,0 +1,256 @@
+- generic [ref=e1]:
+  - generic [ref=e3]:
+    - generic [ref=e4]:
+      - generic [ref=e7]: Polling active
+      - link "" [ref=e8] [cursor=pointer]:
+        - /url: /settings
+        - generic [ref=e9]: 
+    - banner [ref=e10]:
+      - heading "File Wizard" [level=1] [ref=e11]
+    - main [ref=e12]:
+      - generic [ref=e14]:
+        - group "Choose Files" [ref=e15]:
+          - heading "Choose Files" [level=2] [ref=e17]
+          - generic [ref=e18]:
+            - button "Choose Files..." [ref=e19] [cursor=pointer]
+            - generic [ref=e20] [cursor=pointer]: Choose Files...
+            - generic "test-doc.txt" [ref=e77]
+        - generic [ref=e22]:
+          - group "Convert" [ref=e23]:
+            - heading "Convert" [level=2] [ref=e25]
+            - generic [ref=e26]:
+              - generic [ref=e27]: Output Format
+              - combobox [expanded] [ref=e28] [cursor=pointer]:
+                - generic [ref=e29]:
+                  - combobox "Output Format":
+                    - option "LibreOffice - PDF Document" [selected]
+                    - option "LibreOffice - Word Document (DOCX)"
+                    - option "LibreOffice - Word 97-2003 Document (DOC)"
+                    - option "LibreOffice - OpenDocument Text"
+                    - option "LibreOffice - HTML Document"
+                    - option "LibreOffice - Rich Text Format"
+                    - option "LibreOffice - Plain Text"
+                    - option "LibreOffice - Word 2003 XML"
+                    - option "LibreOffice - EPUB E-Book"
+                    - option "LibreOffice - Excel Spreadsheet (XLSX)"
+                    - option "LibreOffice - Excel 97-2003 Spreadsheet (XLS)"
+                    - option "LibreOffice - OpenDocument Spreadsheet"
+                    - option "LibreOffice - CSV"
+                    - option "LibreOffice - PowerPoint Presentation (PPTX)"
+                    - option "LibreOffice - PowerPoint 97-2003 Presentation (PPT)"
+                    - option "LibreOffice - OpenDocument Presentation"
+                    - option "LibreOffice - SVG Image (from Draw/Impress)"
+                    - option "LibreOffice - PNG Image (from Draw/Impress)"
+                    - option "LibreOffice - JPEG Image (from Draw/Impress)"
+                    - option "LibreOffice - MS Works Document"
+                    - option "LibreOffice - dBase Database File"
+                    - option "Pandoc - Word Document"
+                    - option "Pandoc - OpenDocument Text"
+                    - option "Pandoc - PDF Document"
+                    - option "Pandoc - Rich Text Format"
+                    - option "Pandoc - Plain Text"
+                    - option "Pandoc - Markdown (Strict)"
+                    - option "Pandoc - Markdown (GitHub-Flavored)"
+                    - option "Pandoc - LaTeX"
+                    - option "Pandoc - HTML5"
+                    - option "Pandoc - EPUB v3 Book"
+                    - option "Pandoc - EPUB v2 Book"
+                    - option "Pandoc - PowerPoint Presentation"
+                    - option "Pandoc - Beamer PDF Slides"
+                    - option "Pandoc - Slidy HTML Slides"
+                    - option "Pandoc - reveal.js HTML Slides"
+                    - option "Pandoc - reStructuredText"
+                    - option "Pandoc - Jira Wiki Markup"
+                    - option "Pandoc - MediaWiki Markup"
+                    - option "Pandoc - AsciiDoc"
+                    - option "Pandoc - Textile"
+                    - option "Pandoc - OPML"
+                    - option "Pandoc - Groff Man Page"
+                    - option "Pandoc - DocBook XML"
+                    - option "Pandoc - LaTeX Source"
+                    - option "Pandoc - ConTeXt Document"
+                    - option "Pandoc - Groff MS Document"
+                    - option "Pandoc - FictionBook E-Book"
+                    - option "Pandoc - JATS XML (Academic Publishing)"
+                    - option "Pandoc - TEI Simple XML"
+                    - option "Pandoc - DocBook 5 XML"
+                    - option "Pandoc - ZimWiki Markup"
+                    - option "Pandoc - XWiki Markup"
+                    - option "Pandoc - Emacs Muse"
+                    - option "Pandoc - Haddock Haskell Docs"
+                    - option "Pandoc - DZSlides HTML Slides"
+                    - option "Pandoc - S5 HTML Slides"
+                    - option "Pandoc - Pandoc JSON AST"
+                    - option "Pandoc - Pandoc Native AST"
+                    - option "Calibre (ebook-convert) - EPUB"
+                    - option "Calibre (ebook-convert) - MOBI"
+                    - option "Calibre (ebook-convert) - Amazon Kindle (AZW3)"
+                    - option "Calibre (ebook-convert) - PDF"
+                    - option "Calibre (ebook-convert) - Word Document"
+                    - option "Calibre (ebook-convert) - Rich Text Format"
+                    - option "Calibre (ebook-convert) - Plain Text"
+                    - option "Calibre (ebook-convert) - FictionBook 2"
+                    - option "Calibre (ebook-convert) - Zipped HTML"
+                    - option "Calibre (ebook-convert) - eReader PDB"
+                    - option "Calibre (ebook-convert) - Sony BroadBand eBook"
+                    - option "Calibre (ebook-convert) - Microsoft Reader"
+                    - option "Calibre (ebook-convert) - Psion Series 3"
+                    - option "Calibre (ebook-convert) - Open eBook"
+                    - option "Calibre (ebook-convert) - Palm Markup Language"
+                    - option "Calibre (ebook-convert) - Rocket eBook"
+                    - option "Calibre (ebook-convert) - Samsung Note eBook"
+                    - option "Calibre (ebook-convert) - Kobo EPUB"
+                    - option "Calibre (ebook-convert) - Palm Markup Language (Zipped)"
+                    - option "Calibre (ebook-convert) - Plain Text (Zipped)"
+                    - option "Calibre (ebook-convert) - Zipped Container"
+                    - option "Markitdown - Markdown from Everything!"
+                  - listbox [ref=e30]:
+                    - option "Select a format..." [selected] [ref=e78]
+                - generic [ref=e82]:
+                  - searchbox "Select a format..." [active] [ref=e83]
+                  - listbox [ref=e84]:
+                    - group [ref=e85]:
+                      - generic [ref=e86]: LibreOffice
+                    - treeitem "LibreOffice - PDF Document Select" [selected] [ref=e87]
+                    - treeitem "LibreOffice - Word Document (DOCX)" [ref=e88]
+                    - treeitem "LibreOffice - Word 97-2003 Document (DOC)" [ref=e89]
+                    - treeitem "LibreOffice - OpenDocument Text" [ref=e90]
+                    - treeitem "LibreOffice - HTML Document" [ref=e91]
+                    - treeitem "LibreOffice - Rich Text Format" [ref=e92]
+                    - treeitem "LibreOffice - Plain Text" [ref=e93]
+                    - treeitem "LibreOffice - Word 2003 XML" [ref=e94]
+                    - treeitem "LibreOffice - EPUB E-Book" [ref=e95]
+                    - treeitem "LibreOffice - Excel Spreadsheet (XLSX)" [ref=e96]
+                    - treeitem "LibreOffice - Excel 97-2003 Spreadsheet (XLS)" [ref=e97]
+                    - treeitem "LibreOffice - OpenDocument Spreadsheet" [ref=e98]
+                    - treeitem "LibreOffice - CSV" [ref=e99]
+                    - treeitem "LibreOffice - PowerPoint Presentation (PPTX)" [ref=e100]
+                    - treeitem "LibreOffice - PowerPoint 97-2003 Presentation (PPT)" [ref=e101]
+                    - treeitem "LibreOffice - OpenDocument Presentation" [ref=e102]
+                    - treeitem "LibreOffice - SVG Image (from Draw/Impress)" [ref=e103]
+                    - treeitem "LibreOffice - PNG Image (from Draw/Impress)" [ref=e104]
+                    - treeitem "LibreOffice - JPEG Image (from Draw/Impress)" [ref=e105]
+                    - treeitem "LibreOffice - MS Works Document" [ref=e106]
+                    - treeitem "LibreOffice - dBase Database File" [ref=e107]
+                    - group [ref=e108]:
+                      - generic [ref=e109]: Pandoc
+                    - treeitem "Pandoc - Word Document" [ref=e110]
+                    - treeitem "Pandoc - OpenDocument Text" [ref=e111]
+                    - treeitem "Pandoc - PDF Document" [ref=e112]
+                    - treeitem "Pandoc - Rich Text Format" [ref=e113]
+                    - treeitem "Pandoc - Plain Text" [ref=e114]
+                    - treeitem "Pandoc - Markdown (Strict)" [ref=e115]
+                    - treeitem "Pandoc - Markdown (GitHub-Flavored)" [ref=e116]
+                    - treeitem "Pandoc - LaTeX" [ref=e117]
+                    - treeitem "Pandoc - HTML5" [ref=e118]
+                    - treeitem "Pandoc - EPUB v3 Book" [ref=e119]
+                    - treeitem "Pandoc - EPUB v2 Book" [ref=e120]
+                    - treeitem "Pandoc - PowerPoint Presentation" [ref=e121]
+                    - treeitem "Pandoc - Beamer PDF Slides" [ref=e122]
+                    - treeitem "Pandoc - Slidy HTML Slides" [ref=e123]
+                    - treeitem "Pandoc - reveal.js HTML Slides" [ref=e124]
+                    - treeitem "Pandoc - reStructuredText" [ref=e125]
+                    - treeitem "Pandoc - Jira Wiki Markup" [ref=e126]
+                    - treeitem "Pandoc - MediaWiki Markup" [ref=e127]
+                    - treeitem "Pandoc - AsciiDoc" [ref=e128]
+                    - treeitem "Pandoc - Textile" [ref=e129]
+                    - treeitem "Pandoc - OPML" [ref=e130]
+                    - treeitem "Pandoc - Groff Man Page" [ref=e131]
+                    - treeitem "Pandoc - DocBook XML" [ref=e132]
+                    - treeitem "Pandoc - LaTeX Source" [ref=e133]
+                    - treeitem "Pandoc - ConTeXt Document" [ref=e134]
+                    - treeitem "Pandoc - Groff MS Document" [ref=e135]
+                    - treeitem "Pandoc - FictionBook E-Book" [ref=e136]
+                    - treeitem "Pandoc - JATS XML (Academic Publishing)" [ref=e137]
+                    - treeitem "Pandoc - TEI Simple XML" [ref=e138]
+                    - treeitem "Pandoc - DocBook 5 XML" [ref=e139]
+                    - treeitem "Pandoc - ZimWiki Markup" [ref=e140]
+                    - treeitem "Pandoc - XWiki Markup" [ref=e141]
+                    - treeitem "Pandoc - Emacs Muse" [ref=e142]
+                    - treeitem "Pandoc - Haddock Haskell Docs" [ref=e143]
+                    - treeitem "Pandoc - DZSlides HTML Slides" [ref=e144]
+                    - treeitem "Pandoc - S5 HTML Slides" [ref=e145]
+                    - treeitem "Pandoc - Pandoc JSON AST" [ref=e146]
+                    - treeitem "Pandoc - Pandoc Native AST" [ref=e147]
+                    - group [ref=e148]:
+                      - generic [ref=e149]: Calibre (ebook-convert)
+                    - treeitem "Calibre (ebook-convert) - EPUB" [ref=e150]
+                    - treeitem "Calibre (ebook-convert) - MOBI" [ref=e151]
+                    - treeitem "Calibre (ebook-convert) - Amazon Kindle (AZW3)" [ref=e152]
+                    - treeitem "Calibre (ebook-convert) - PDF" [ref=e153]
+                    - treeitem "Calibre (ebook-convert) - Word Document" [ref=e154]
+                    - treeitem "Calibre (ebook-convert) - Rich Text Format" [ref=e155]
+                    - treeitem "Calibre (ebook-convert) - Plain Text" [ref=e156]
+                    - treeitem "Calibre (ebook-convert) - FictionBook 2" [ref=e157]
+                    - treeitem "Calibre (ebook-convert) - Zipped HTML" [ref=e158]
+                    - treeitem "Calibre (ebook-convert) - eReader PDB" [ref=e159]
+                    - treeitem "Calibre (ebook-convert) - Sony BroadBand eBook" [ref=e160]
+                    - treeitem "Calibre (ebook-convert) - Microsoft Reader" [ref=e161]
+                    - treeitem "Calibre (ebook-convert) - Psion Series 3" [ref=e162]
+                    - treeitem "Calibre (ebook-convert) - Open eBook" [ref=e163]
+                    - treeitem "Calibre (ebook-convert) - Palm Markup Language" [ref=e164]
+                    - treeitem "Calibre (ebook-convert) - Rocket eBook" [ref=e165]
+                    - treeitem "Calibre (ebook-convert) - Samsung Note eBook" [ref=e166]
+                    - treeitem "Calibre (ebook-convert) - Kobo EPUB" [ref=e167]
+                    - treeitem "Calibre (ebook-convert) - Palm Markup Language (Zipped)" [ref=e168]
+                    - treeitem "Calibre (ebook-convert) - Plain Text (Zipped)" [ref=e169]
+                    - treeitem "Calibre (ebook-convert) - Zipped Container" [ref=e170]
+                    - group [ref=e171]:
+                      - generic [ref=e172]: Markitdown
+                    - treeitem "Markitdown - Markdown from Everything!" [ref=e173]
+            - button "Start Conversion" [ref=e32] [cursor=pointer]
+          - group "OCR PDF/Image" [ref=e33]:
+            - heading "OCR PDF/Image" [level=2] [ref=e35]
+            - paragraph [ref=e36]: Extract text from scanned documents and images.
+            - button "Start OCR" [ref=e37] [cursor=pointer]
+          - group "Transcribe A/V" [ref=e38]:
+            - heading "Transcribe A/V" [level=2] [ref=e40]
+            - generic [ref=e41]:
+              - generic [ref=e42]: Model Size
+              - listbox "Model Size" [ref=e43] [cursor=pointer]:
+                - generic [ref=e44]:
+                  - combobox "Model Size":
+                    - option "base" [selected]
+                    - option "distil-large-v2"
+                    - option "large-v3"
+                    - option "medium"
+                    - option "small"
+                    - option "tiny"
+                  - option "base" [selected] [ref=e46]
+            - generic [ref=e48] [cursor=pointer]:
+              - checkbox "Generate Timestamps" [ref=e49]
+              - text: Generate Timestamps
+            - button "Start Transcription" [ref=e50] [cursor=pointer]
+          - group "Text-to-Speech" [ref=e51]:
+            - heading "Text-to-Speech" [level=2] [ref=e53]
+            - generic [ref=e54]:
+              - generic [ref=e55]: Voice Model
+              - combobox [ref=e56] [cursor=pointer]:
+                - generic [ref=e57]:
+                  - combobox "Voice Model":
+                    - option "error" [selected]
+                  - listbox [ref=e58]:
+                    - option "Select voice..." [selected] [ref=e59]
+                - text: Select
+            - button "Start Synthesis" [ref=e60] [cursor=pointer]
+      - generic [ref=e61]:
+        - generic [ref=e62]:
+          - heading "History" [level=2] [ref=e63]
+          - button "Download Selected as ZIP" [disabled] [ref=e64]
+        - table [ref=e66]:
+          - rowgroup [ref=e67]:
+            - row "File File Size Task Submitted Status Action" [ref=e68]:
+              - columnheader [ref=e69]:
+                - checkbox [ref=e70]
+              - columnheader "File" [ref=e71]
+              - columnheader "File Size" [ref=e72]
+              - columnheader "Task" [ref=e73]
+              - columnheader "Submitted" [ref=e74]
+              - columnheader "Status" [ref=e75]
+              - columnheader "Action" [ref=e76]
+          - rowgroup
+  - generic [ref=e79]:
+    - generic [ref=e80]: "187"
+    - text: in |
+    - generic [ref=e81]: "195"
+    - text: out

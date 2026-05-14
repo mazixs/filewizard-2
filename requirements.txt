@@ -1,47 +1,39 @@
 # Web Framework & Server
-fastapi
-gunicorn
-uvicorn[standard]
-Jinja2
+fastapi>=0.115.0
+uvicorn[standard]>=0.34.0
+gunicorn>=23.0.0
+Jinja2>=3.1.0
+python-multipart>=0.0.20
 
 # Database & Task Queue
-SQLAlchemy
-huey
-
-# OCR & Transcription Features
-faster-whisper
-ocrmypdf
-pytesseract
-pypdf
-piper-tts
-kokoro-tts
-opencv-python-headless
-Pillow
+SQLAlchemy>=2.0.49
+huey>=2.5.0
 
 # Configuration & Utilities
-python-dotenv
-werkzeug
-itsdangerous
-authlib
-dotenv
-httpx
-PyYAML
-pydantic
-pydantic-settings
-python-multipart
-markitdown[pdf,docx,pptx,xlsx,outlook]==0.1.3
-PyPDF2==3.0.1
-mechanize
-html5_parser
-css_parser
-#PyQt6==6.9.1 # uncomment for calibre, it uses the webengine
-#PyQt6-Qt6==6.9.2
-#PyQt6-WebEngine==6.9.0
-#PyQt6-WebEngine-Qt6==6.9.2
+python-dotenv>=1.0.0
+PyYAML>=6.0.2
+httpx>=0.28.0
+pydantic>=2.13.0
+pydantic-settings>=2.0.0
+werkzeug>=3.0.0
+itsdangerous>=2.2.0
+authlib>=1.4.0
+bleach>=6.2.0
 
-# Security libraries
-bleach
+# PDF Processing (primary)
+pymupdf>=1.25.0
 
-# Docling
---extra-index-url https://download.pytorch.org/whl/cpu
-docling
+# OCR & Image Processing
+pytesseract>=0.3.13
+Pillow>=11.0.0
+opencv-python-headless>=4.10.0
+
+# Transcription (optional, large models)
+faster-whisper>=1.1.0
+
+# TTS (optional)
+piper-tts
+kokoro-tts
+
+# Document conversion helpers
+markitdown[pdf,docx,pptx,xlsx,outlook]>=0.1.3

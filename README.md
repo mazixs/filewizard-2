@@ -8,12 +8,9 @@ A self-hosted, browser-based utility for file conversion, OCR and audio transcri
 
 ![Screenshot](screenshot.png)
 
-
-
-
 ## Features
 - Convert between many file formats; extendable via `settings.yml` to add any CLI tool.
-- OCR for PDFs and images (`tesseract` / `ocrmypdf`).
+- OCR for PDFs and images (`tesseract` / `PyMuPDF`).
 - Audio transcription using Whisper models.
 - Simple, responsive dark UI with drag-and-drop and file picker.
 - Background job processing with real-time status updates and persistent history.
@@ -24,79 +21,71 @@ A self-hosted, browser-based utility for file conversion, OCR and audio transcri
 **Warning:** exposing this app publicly without authentication risks arbitrary code execution. Intended for local use or behind a properly configured OAuth/OIDC provider.
 
 #### Tech stack
-FastAPI, vanilla HTML/JS/CSS frontend.
+FastAPI, vanilla HTML/JS/CSS frontend, SQLAlchemy (SQLite), Huey task queue.
 
 ## Installation
-### Recommended — Docker (pull from Docker Hub)
-Images available:
-- `loredcast/filewizard:latest` (newest full release without cuda)
-- `loredcast/filewizard:0.3-small` (omits TeX and other large tools)
-- `loredcast/filewizard:0.3-cuda` (CUDA-enabled)
 
-```
-# docker-compose.yml
-version: "3.9"
-services:
-  web:
-    image: loredcast/filewizard:latest
-    environment:
-      - LOCAL_ONLY=True # False for Auth
-      - SECRET_KEY= # set if using auth
-      - UPLOADS_DIR=/app/uploads # inside the container
-      - PROCESSED_DIR=/app/processed # inside the container
-      - OMP_NUM_THREADS=1
-      - DOWNLOAD_KOKORO_ON_STARTUP=true
-    ports:
-      - "6969:8000"
-    volumes:
-      - ./config:/app/config # settings.yml will be here
-      - ./uploads_data:/app/uploads
-      - ./processed_data:/app/processed
-volumes:
-  uploads_data: {}
-  processed_data: {}
-```
-
-
-Copy `docker-compose.yml` from the repo or the above, adjust as needed, then:
+### Quick start — Docker Compose (pre-built image)
 
 ```bash
+curl -L https://github.com/LoredCast/filewizard/raw/main/docker-compose.yml -o docker-compose.yml
 docker compose up -d
 ```
-FileWizard will be available at `localhost:6969`
 
-### Build locally with Docker (new build types)
+FileWizard will be available at `http://localhost:6969`.
 
-For different build configurations, use the BUILD_TYPE argument:
+### Build locally with Docker
 
-```bash
-# Full build (includes all dependencies but no CUDA)
-docker build --build-arg BUILD_TYPE=full -t filewizard:full .
+The Dockerfile provides three multi-stage build targets:
 
-# Small build (excludes TeX and markitdown dependencies for smaller image)
-docker build --build-arg BUILD_TYPE=small -t filewizard:small .
-
-# CUDA build (includes CUDA support for GPU acceleration)
-docker build --build-arg BUILD_TYPE=cuda -t filewizard:cuda .
-```
-
-Or with docker-compose:
+| Target | Description | Size |
+|---|---|---|
+| `small-final` | Minimal deps, no TeX, no TTS models | ~1 GB |
+| `full-final` | All converters, TTS, transcription | ~1.8 GB |
+| `cuda-final` | Full + CUDA 12.6 + GPU support | ~4 GB |
 
 ```bash
-# For full build
-docker compose build --build-arg BUILD_TYPE=full
+# Small build (recommended for most users)
+docker build --target small-final -t filewizard:local .
+docker run -d -p 6969:8000 -e LOCAL_ONLY=true filewizard:local
 
-# For small build
-docker compose build --build-arg BUILD_TYPE=small
+# Full build
+docker build --target full-final -t filewizard:full .
 
-# For CUDA build
-docker compose build --build-arg BUILD_TYPE=cuda
+# CUDA build
+docker build --target cuda-final -t filewizard:cuda .
 ```
+
+Or use the helper script:
+
+```bash
+./scripts/run-docker.sh small-final 6969
+```
+
+For GPU support, uncomment the `deploy` block in `docker-compose.yml` and use the `cuda-final` target.
+
+### Local development (no Docker)
+
+```bash
+# One-time setup
+./scripts/setup.sh
+
+# Production-like mode (gunicorn + huey consumer)
+./run.sh
+
+# Development mode (uvicorn reload + huey consumer)
+./scripts/dev.sh
+```
+
+Requirements: Python 3.12+ and system packages (Tesseract, LibreOffice, Pandoc, FFmpeg, etc.).
+
+## GPU / CUDA setup
 
 For CUDA builds, ensure you have:
 - NVIDIA Docker runtime installed (`nvidia-docker2` package)
 - Compatible GPU with appropriate drivers
-- Add the GPU configuration to docker-compose.yml if building with compose:
+- Add the GPU configuration to `docker-compose.yml`:
+
 ```yaml
     deploy:
       resources:
@@ -107,38 +96,17 @@ For CUDA builds, ensure you have:
               capabilities: [gpu]
 ```
 
-For troubleshooting GPU issues, make sure:
-1. Your GPU drivers support the CUDA version (12.1)
-2. cuDNN libraries are properly installed in the container
-3. The `nvidia-container-toolkit` is properly configured
-4. Test NVIDIA setup with: `docker run --rm --gpus all nvidia/cuda:12.1-base-ubuntu22.04 nvidia-smi`
-
-```bash
-git clone https://github.com/LoredCast/filewizard.git
-cd filewizard
-docker compose up --build
-```
-Note: building can be slow (TeX and other dependencies).
-
-### Manual (no Docker)
-```bash
-git clone https://github.com/LoredCast/filewizard.git
-cd filewizard
-python -m venv venv
-source venv/bin/activate   # Windows: venv\\Scripts\\activate
-pip install -r requirements.txt
-chmod +x run.sh
-./run.sh
-```
-
-Dependencies include `fastapi`, `uvicorn`, `sqlalchemy`, `huey`, `faster-whisper`, `ocrmypdf`, `pytesseract`, `python-multipart`, `pyyaml`, etc.
+For troubleshooting GPU issues:
+1. Your GPU drivers support CUDA 12.6
+2. The `nvidia-container-toolkit` is properly configured
+3. Test NVIDIA setup with: `docker run --rm --gpus all nvidia/cuda:12.6.3-base-ubuntu24.04 nvidia-smi`
 
 ## Configuration & docs
 See the project Wiki for details and examples:  
 https://github.com/LoredCast/filewizard/wiki
 
 ## Usage
-1. Open `http://127.0.0.1:8000`.
+1. Open `http://127.0.0.1:8000` (or the port you mapped).
 2. Drag & drop or choose files.
 3. Select action: Convert, OCR, or Transcribe.
 4. Track job progress in the History table (updates automatically).
@@ -159,12 +127,11 @@ https://github.com/LoredCast/filewizard/wiki
 | **libjxl (cjxl / djxl)** | Raster inputs: `.png`, `.jpg/.jpeg`, `.ppm/.pbm/.pgm`, `.gif`, etc. | `.jxl` (JPEG XL) | Encoder/decoder for JPEG XL; availability depends on build. |
 | **resvg** | `.svg/.svgz` | `.png` (raster) | Fast, accurate SVG renderer — good for SVG→PNG conversion. |
 | **Potrace** | Bitmaps: `.pbm`, `.pgm`, `.ppm` (PNM family), `.bmp` (via conversion) | Vector: `.svg`, `.pdf`, `.eps`, `.ps`, `.dxf`, `.geojson` | Traces bitmaps to vector paths; often used with pre-conversion steps. |
-| **Potrace GUI / autotrace alternatives** | — | — | Not included but sometimes available in toolchains; behavior varies. |
 | **MarkItDown / markitdown** | `.pdf`, `.docx`, `.doc`, `.pptx`, `.ppt`, `.xlsx`, `.xls`, `.html`, `.eml`, `.msg`, `.md`, `.txt`, images, `.epub` | `.md` (Markdown) | Utility to extract/produce Markdown from various formats; implementation details vary. |
 | **pngquant** | `.png` (truecolor/rgba) | `.png` (quantized palette PNG) | Lossy PNG quantization for smaller PNGs. |
 | **MozJPEG (cjpeg, jpegtran)** | `.ppm/.pbm/.pgm` (PNM), `.bmp`, existing `.jpg` | `.jpg/.jpeg` (MozJPEG-optimized) | Produces smaller JPEGs with improved compression; good for recompression. |
 | **SoX (Sound eXchange)** | `.wav`, `.aiff`, `.mp3` (if libmp3lame), `.flac`, `.ogg/.oga`, `.raw`, `.au`, `.voc`, `.w64`, `.gsm`, `.amr`, `.m4a` (if libs present) | `.wav`, `.aiff`, `.flac`, `.mp3`, `.ogg`, `.raw`, `.w64`, `.opus`, `.amr`, `.m4a` | Audio processing, normalization, effects; exact formats depend on linked libraries. |
-| **Tesseract OCR / ocrmypdf** | Image formats (`.png`, `.jpg`, `.jpeg`, `.tiff`), PDFs (image PDFs) | Plain text (`.txt`), searchable PDF (PDF with text layer), HOCR, ALTO XML | OCR engine; language/training data required for best accuracy. `ocrmypdf` is a wrapper for PDF workflows. |
+| **Tesseract OCR** | Image formats (`.png`, `.jpg`, `.jpeg`, `.tiff`), PDFs (image PDFs) | Plain text (`.txt`), searchable PDF (PDF with text layer), HOCR, ALTO XML | OCR engine; language/training data required for best accuracy. |
 | **faster-whisper / OpenAI Whisper (local)** | Audio: `.mp3`, `.wav`, `.m4a`, `.flac`, `.ogg`, `.opus`, `.aac` | Plain text transcripts (`.txt`), `.srt`, `.vtt`, other subtitle formats | Local Whisper implementations for speech-to-text. Models and speed depend on CPU/GPU and model variant. |
 
 

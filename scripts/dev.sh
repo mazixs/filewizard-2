@@ -2,28 +2,25 @@
 set -euo pipefail
 
 # ------------------------------------------------------------------------------
-# Local development launcher for FileWizard
-# Starts Gunicorn + Huey consumer in the foreground with graceful shutdown.
-# Automatically detects and activates a local virtual environment.
+# Development launcher for FileWizard
+# Runs uvicorn with auto-reload + huey consumer in the foreground.
 # ------------------------------------------------------------------------------
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-cd "$SCRIPT_DIR"
+PROJECT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
+cd "$PROJECT_DIR"
 
 # Auto-activate venv if present
 if [[ -d ".venv" && -f ".venv/bin/activate" ]]; then
-    # shellcheck source=/dev/null
     source .venv/bin/activate
     echo "Activated virtual environment: .venv"
 elif [[ -d "venv" && -f "venv/bin/activate" ]]; then
-    # shellcheck source=/dev/null
     source venv/bin/activate
     echo "Activated virtual environment: venv"
 fi
 
 # Load .env if it exists
 if [[ -f .env ]]; then
-    # shellcheck source=/dev/null
     set -a
     source .env
     set +a
@@ -32,43 +29,37 @@ fi
 
 # Defaults
 export LOCAL_ONLY="${LOCAL_ONLY:-True}"
-export SECRET_KEY="${SECRET_KEY:-$(openssl rand -hex 16)}"
+export SECRET_KEY="${SECRET_KEY:-dev-secret-key}"
 export UPLOADS_DIR="${UPLOADS_DIR:-./uploads}"
 export PROCESSED_DIR="${PROCESSED_DIR:-./processed}"
 export CHUNK_TMP_DIR="${CHUNK_TMP_DIR:-./uploads/tmp}"
 export ENV="${ENV:-dev}"
 
-# Create directories if missing
 mkdir -p "$UPLOADS_DIR" "$PROCESSED_DIR" "$CHUNK_TMP_DIR"
 
 echo "============================================================"
-echo "Starting FileWizard (local mode)"
+echo "Starting FileWizard (DEVELOPMENT mode)"
 echo "============================================================"
-echo "  LOCAL_ONLY     = $LOCAL_ONLY"
-echo "  UPLOADS_DIR    = $UPLOADS_DIR"
-echo "  PROCESSED_DIR  = $PROCESSED_DIR"
-echo "  CHUNK_TMP_DIR  = $CHUNK_TMP_DIR"
-echo "  ENV            = $ENV"
+echo "  API:     http://${BIND:-0.0.0.0:8000}"
+echo "  Reload:  enabled"
 echo "============================================================"
 
-# Verify required commands are available
-if ! command -v gunicorn &>/dev/null; then
-    echo "ERROR: gunicorn not found. Did you install dependencies?"
-    echo "  python3 -m venv .venv && source .venv/bin/activate && pip install -r requirements_small.txt"
+if ! command -v uvicorn &>/dev/null; then
+    echo "ERROR: uvicorn not found. Run ./scripts/setup.sh first."
     exit 1
 fi
 if ! command -v huey_consumer &>/dev/null; then
-    echo "ERROR: huey_consumer not found. Did you install dependencies?"
+    echo "ERROR: huey_consumer not found. Run ./scripts/setup.sh first."
     exit 1
 fi
 
-# Cleanup function: kill both children on SIGINT/SIGTERM
+# Cleanup function
 cleanup() {
     echo ""
     echo "Shutting down..."
-    if [[ -n "${GUNICORN_PID:-}" ]] && kill -0 "$GUNICORN_PID" 2>/dev/null; then
-        kill -TERM "$GUNICORN_PID" 2>/dev/null || true
-        wait "$GUNICORN_PID" 2>/dev/null || true
+    if [[ -n "${UVICORN_PID:-}" ]] && kill -0 "$UVICORN_PID" 2>/dev/null; then
+        kill -TERM "$UVICORN_PID" 2>/dev/null || true
+        wait "$UVICORN_PID" 2>/dev/null || true
     fi
     if [[ -n "${HUEY_PID:-}" ]] && kill -0 "$HUEY_PID" 2>/dev/null; then
         kill -TERM "$HUEY_PID" 2>/dev/null || true
@@ -79,25 +70,22 @@ cleanup() {
 }
 trap cleanup INT TERM
 
-# Start Gunicorn
-gunicorn \
-    -w 2 \
-    --threads 2 \
-    -k uvicorn.workers.UvicornWorker \
-    --forwarded-allow-ips='*' \
-    --timeout 120 \
-    main:app \
-    -b "${BIND:-0.0.0.0:8000}" \
+# Start Uvicorn with reload
+uvicorn main:app \
+    --host "${HOST:-0.0.0.0}" \
+    --port "${PORT:-8000}" \
+    --reload \
+    --reload-dir app \
     &
-GUNICORN_PID=$!
-echo "Gunicorn started (PID: $GUNICORN_PID) → http://${BIND:-0.0.0.0:8000}"
+UVICORN_PID=$!
+echo "Uvicorn started (PID: $UVICORN_PID) → http://${HOST:-0.0.0.0}:${PORT:-8000}"
 
 # Start Huey consumer
 huey_consumer main.huey -w 2 &
 HUEY_PID=$!
 echo "Huey consumer started (PID: $HUEY_PID)"
 
-# Wait for either child to exit; if one dies, kill the other
+# Wait for either child to exit
 wait -n
 EXIT_CODE=$?
 

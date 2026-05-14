@@ -1,40 +1,38 @@
-version: "3.9"
 services:
   web:
-    image: loredcast/filewizard:latest
     build:
       context: .
-      target: full-final # Change to 'full-final' or 'small-final' as needed
-    #env_file:
-    # - .env
-    environment:
-      - LOCAL_ONLY=True # set to False to enable OIDC auth (requires configuration in settings.yml)
-      - SECRET_KEY= # if using auth
-      - UPLOADS_DIR=/app/uploads # directory structure INSIDE the container, not on host
-      - PROCESSED_DIR=/app/processed
-      - OMP_NUM_THREADS=1
-      - DOWNLOAD_KOKORO_ON_STARTUP=true
-      #- TRANSCRIPTION_DEVICE=cpu  # change to 'cuda' if GPU available
-      #- TRANSCRIPTION_COMPUTE_TYPE=int8 # change to 'float16' or 'int8_float16' if GPU available
-      #- TRANSCRIPTION_DEVICE_INDEX=0 # change if multiple GPUs available
-    #user: "1000:1000"
+      target: ${TARGET:-small-final}
+    container_name: filewizard
+    restart: unless-stopped
     ports:
-      - "6969:8000"
+      - "${PORT:-6969}:8000"
     volumes:
-      # Mount local directories and files into the container for persistence
-      - ./config:/app/config # you can copy settings.default.yml into here as settings.yml
+      - ./config:/app/config
       - ./uploads_data:/app/uploads
       - ./processed_data:/app/processed
-
-    # For CUDA builds, enable GPU access (uncomment below)
-    #deploy:
-    #  resources:
-    #    reservations:
-    #      devices:
-    #        - driver: nvidia
-    #          count: all
-    #          capabilities: [gpu]
-
-volumes:
-  uploads_data: {}
-  processed_data: {}
+    environment:
+      - LOCAL_ONLY=True
+      - SECRET_KEY=${SECRET_KEY:-}
+      - UPLOADS_DIR=/app/uploads
+      - PROCESSED_DIR=/app/processed
+      - OMP_NUM_THREADS=1
+      - DOWNLOAD_KOKORO_ON_STARTUP=${DOWNLOAD_KOKORO_ON_STARTUP:-false}
+      # GPU options (uncomment for CUDA target)
+      # - TRANSCRIPTION_DEVICE=cuda
+      # - TRANSCRIPTION_COMPUTE_TYPE=float16
+      # - TRANSCRIPTION_DEVICE_INDEX=0
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
+    # Uncomment for GPU access (requires NVIDIA Container Toolkit)
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           count: all
+    #           capabilities: [gpu]
